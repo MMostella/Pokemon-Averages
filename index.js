@@ -12,7 +12,13 @@ async function fetchPokemon(limit, offset) {
     fetch(`${api_url}?limit=${limit}&offset=${offset}`)
         .then((response) => response.json())
         .then(allPokemon => {
+            // allPokemon.results.reduce(pokemon => {
+            //         getPokemonData(pokemon, limit)
+            //     })
             // console.log(allPokemon);
+            // for (let i = 0; i < allPokemon.results.length; i++) {
+            //     getPokemonData(limit)
+            // }
             allPokemon.results.forEach(pokemon => {
                 getPokemonData(pokemon, limit)
             })
@@ -25,9 +31,6 @@ function getPokemonData(pokemon, limit) {
     fetch(url)
     .then(response => response.json())
     .then(pokeData => {
-        console.log("---")
-        console.log(pokeData.height);
-        console.log(pokeData.weight);
         height.push(pokeData.height);
         weight.push(pokeData.weight);
         pokeAverages(pokeData.height, pokeData.weight, limit);
@@ -39,8 +42,9 @@ function pokeAverages(limit) {
     let weightSum = lodash.sum(weight);
     let heightAverage = heightSum / limit;
     let weightAverage = weightSum / limit;
+    console.log('---')
     console.log("Height Average: ", heightAverage);
     console.log("Weight Average: ", weightAverage);
 }
 
-await fetchPokemon(2, 30)
+await fetchPokemon(2, 0)
