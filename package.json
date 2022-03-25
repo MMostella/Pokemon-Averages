@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.26.1",
+    "lodash": "^4.17.21",
     "node-fetch": "^3.2.3",
     "react": "^17.0.2"
   }
