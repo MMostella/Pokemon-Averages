@@ -1,10 +1,11 @@
-const { height, weight } = require("./index");
+const utils = require("./index");
 
 describe("checking arrays", () => {
-  it("height array to be empty at the start of execution", () => {
-    expect(height.toBe([]));
+  test("height array to be empty at the start of execution", () => {
+    expect(utils.height.length.toBe(0));
   });
-  it("height array to have contents at the end of execution", () => {
-    expect(height.to());
+  test("height array not empty at the end of execution", () => {
+    sleep();
+    expect(utils.height.length.not.toBe(0));
   });
 });

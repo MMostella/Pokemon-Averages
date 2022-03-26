@@ -10,7 +10,7 @@ var weight = [];
 let limit;
 let offset;
 
-const sleep = (ms = 1500) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 let start = Date.now();
 
 async function askLimit() {
@@ -41,10 +41,10 @@ async function fetchPokemon() {
   fetch(`${api_url}?limit=${limit}&offset=${offset}`)
     .then((response) => response.json())
     .then((allPokemon) => {
-      //   console.log(allPokemon);
+      // console.log(allPokemon);
       allPokemon.results.forEach((pokemon) => {
         // console.log(pokemon);
-        getPokemonData(pokemon, limit);
+        getPokemonData(pokemon);
       });
     });
   return;
@@ -55,6 +55,7 @@ function getPokemonData(pokemon) {
   fetch(url)
     .then((response) => response.json())
     .then((pokeData) => {
+      // console.log(pokeData.types);
       height.push(pokeData.height);
       //   console.log(height);
       weight.push(pokeData.weight);
@@ -65,10 +66,13 @@ function getPokemonData(pokemon) {
 
 async function pokeAverages() {
   await sleep();
+  console.clear();
   let heightSum = lodash.sum(height);
   let weightSum = lodash.sum(weight);
   let heightAverage = heightSum / limit;
   let weightAverage = weightSum / limit;
+  console.log(`Averages for ${limit} pokemon...`);
+  console.log("-----");
   console.log("Height Average: ", heightAverage);
   console.log("Weight Average: ", weightAverage);
   let end = Date.now();
@@ -79,3 +83,8 @@ await askLimit();
 await askOffset();
 await fetchPokemon();
 await pokeAverages();
+
+// module.exports = {
+//   height,
+//   sleep,
+// };
