@@ -83,8 +83,3 @@ await askLimit();
 await askOffset();
 await fetchPokemon();
 await pokeAverages();
-
-// module.exports = {
-//   height,
-//   sleep,
-// };
