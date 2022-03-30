@@ -1,19 +1,16 @@
 #!/usr/bin/env node
 
-import fetch from "node-fetch";
-import lodash from "lodash";
+import FetchPokemon from "./components/FetchPokemon.js";
+import GetData from "./components/getData.js";
+import PokeAverages from "./components/PokeAverages.js";
+import Totals from "./components/Totals.js";
 import inquirer from "inquirer";
+import { createSpinner } from "nanospinner";
 
-let api_url = 'https://pokeapi.co/api/v2/pokemon';
-var height = [];
-var weight = [];
 let limit;
 let offset;
 
-const sleep = (ms = 500) => new Promise((r) => setTimeout(r, ms));
-let start = Date.now()
-
-async function askLimit() {
+const askLimit = async () => {
     const answer = await inquirer.prompt({
         name: 'limit',
         type: 'input',
@@ -25,7 +22,7 @@ async function askLimit() {
     limit = answer.limit;
 }
 
-async function askOffset() {
+const askOffset = async () => {
     const answer = await inquirer.prompt({
         name: 'offset',
         type: 'input',
@@ -37,39 +34,25 @@ async function askOffset() {
     offset = answer.offset;
 }
 
-async function fetchPokemon() {
-    fetch(`${api_url}?limit=${limit}&offset=${offset}`)
-        .then((response) => response.json())
-        .then(allPokemon => {
-            allPokemon.results.forEach(pokemon => {
-                getPokemonData(pokemon, limit)
-            })
-        })
-}
-
-function getPokemonData(pokemon) {
-    let url = pokemon.url
-    fetch(url)
-    .then(response => response.json())
-    .then(pokeData => {
-        height.push(pokeData.height);
-        weight.push(pokeData.weight);
+const startApp = async () => {
+    await askLimit();
+    await askOffset();
+    const spinner = createSpinner("Catching them all...").start();
+    const start = Date.now();
+    let pokemon = await FetchPokemon(limit, offset);
+    let pokemonArray = pokemon.map(async (poke) => {
+        let stats = await GetData(poke);
+        return stats;
     })
+    const resolved = await Promise.all(pokemonArray);
+    const test = Totals(resolved);
+    spinner.success({
+        // text: `${actualCount} pokemon sampled, with ${limit - actualCount} errors, resulting in... ${PokeAverages(heightsTotal, weightsTotal, actualCount)}`
+    });
+
+    const stop = Date.now();
+    // console.log(`Completed in ${(stop - start) / 1000} seconds`)
+    return PokeAverages(heightsTotal, weightsTotal, limit)
 }
 
-async function pokeAverages() {
-    await sleep();
-    let heightSum = lodash.sum(height);
-    let weightSum = lodash.sum(weight);
-    let heightAverage = heightSum / limit;
-    let weightAverage = weightSum / limit;
-    console.log("Height Average: ", heightAverage);
-    console.log("Weight Average: ", weightAverage);
-    let end = Date.now()
-    console.log(`Execution time: ${(end - start) / 1000} seconds`);
-}
-
-await askLimit();
-await askOffset();
-await fetchPokemon()
-await pokeAverages()
+startApp();
