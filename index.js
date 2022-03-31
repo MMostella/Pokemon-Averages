@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import FetchPokemon from "./components/FetchPokemon.js";
-import GetData from "./components/getData.js";
+import GetData from "./components/GetData.js";
 import PokeAverages from "./components/PokeAverages.js";
+import Test from "./components/Test.js";
 import Totals from "./components/Totals.js";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
@@ -37,22 +38,23 @@ const askOffset = async () => {
 const startApp = async () => {
     await askLimit();
     await askOffset();
-    const spinner = createSpinner("Catching them all...").start();
+    // const spinner = createSpinner("Catching them all...").start();
     const start = Date.now();
     let pokemon = await FetchPokemon(limit, offset);
     let pokemonArray = pokemon.map(async (poke) => {
         let stats = await GetData(poke);
         return stats;
     })
-    const resolved = await Promise.all(pokemonArray);
-    const test = Totals(resolved);
-    spinner.success({
-        // text: `${actualCount} pokemon sampled, with ${limit - actualCount} errors, resulting in... ${PokeAverages(heightsTotal, weightsTotal, actualCount)}`
-    });
-
-    const stop = Date.now();
+    // console.log(pokemonArray.length)
+    // const resolved = await Promise.all(pokemonArray);
+    // const hippo = Test(resolved, limit)
+    // const test = Totals(resolved);
+    // spinner.success({
+        // text: `${test.actualCount} pokemon sampled, with ${limit - test.actualCount} errors, resulting in...`
+    // });
+    // const stop = Date.now();
     // console.log(`Completed in ${(stop - start) / 1000} seconds`)
-    return PokeAverages(heightsTotal, weightsTotal, limit)
+    // return PokeAverages(test.heightTotal, test.weightTotal, test.actualCount)
 }
 
 startApp();
