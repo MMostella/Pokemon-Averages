@@ -2,17 +2,14 @@ import axios from "axios"
 
 const GetData = async (pokemon) => {
     let url = pokemon.url
-    let average = {
-        height: [],
-        weight: []
-    };
+    let heightArray = [];
+    let weightArray = [];
     await axios(url)
     .then(response => {
-        // console.log(response.data)
-        average.height.push(response.data.height);
-        average.weight.push(response.data.weight);
+        heightArray.push(response.data.height);
+        weightArray.push(response.data.weight);
     })
-    return average
+    return [ heightArray, weightArray ];
 }
 
 export default GetData;
