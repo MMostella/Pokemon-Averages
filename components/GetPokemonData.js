@@ -1,5 +1,5 @@
 import axios from "axios";
-import HandleErrorData from "./HandleErrorData.js";
+import HandleOverflowData from "./HandleOverflowData.js";
 
 export default async function GetData(pokemon) {
   let url = pokemon.url;
@@ -14,9 +14,8 @@ export default async function GetData(pokemon) {
       firstFetch += 1;
     })
     .catch((error) => {
-      // console.log(error)
       if (error.config.url) {
-        let overflow = HandleErrorData(error.config.url);
+        let overflow = HandleOverflowData(error.config.url);
         height += overflow.height;
         weight += overflow.weight;
         secondFetch += 1;

@@ -1,4 +1,4 @@
-import HandleErrorData from "./HandleErrorData.js";
+import HandleOverflowData from "./HandleOverflowData.js";
 import axios from "axios";
 
 const url = "https://pokeapi.co/api/v2/pokemon/2/"
@@ -10,6 +10,6 @@ describe("Getting stats from the indiviual pokemon", () => {
     jest.spyOn(axios, "get").mockResolvedValue({ data: { results: result } });
   })
     it("individual pokemon url goes in, obj with height, weight array is returned", async () => {
-      expect(await HandleErrorData(url)).toEqual(result);
+      expect(await HandleOverflowData(url)).toEqual(result);
     });
   });
