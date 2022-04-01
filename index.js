@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import FetchPokemon from "./components/FetchPokemon.js";
-import GetData from "./components/GetData.js";
-import PokeAverages from "./components/PokeAverages.js";
+import GetPokemonData from "./components/GetPokemonData.js";
+import PokemonAverages from "./components/PokemonAverages.js";
 import Totals from "./components/Totals.js";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
@@ -39,17 +39,18 @@ const startApp = async () => {
   await askOffset();
   const spinner = createSpinner("Let me look around...").start();
   const start = Date.now();
-  let pokemon = await FetchPokemon(limit, offset);
-  let pokemonArray = pokemon.map(async (poke) => {
-    let stats = await GetData(poke);
-    return stats;
+  let pokemonArray = await FetchPokemon(limit, offset);
+  let promisedArray = pokemonArray.map(async (poke) => {
+    let statsObject = await GetPokemonData(poke);
+    return statsObject;
   });
-  const resolved = await Promise.all(pokemonArray);
-  const test = Totals(resolved);
+  const resolvedArray = await Promise.all(promisedArray);
+  const totalsObject = Totals(resolvedArray);
   spinner.success();
   const stop = Date.now();
+  console.clear();
   console.log(`Completed in ${(stop - start) / 1000} seconds`);
-  return PokeAverages(test.heightTotal, test.weightTotal, limit);
+  return PokemonAverages(totalsObject.heightTotal, totalsObject.weightTotal, totalsObject.firstFetch, totalsObject.secondFetch);
 };
 
 startApp();
