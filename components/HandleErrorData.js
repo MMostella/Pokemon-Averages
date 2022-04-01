@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HandleErrorData = async (url) => {
+export default async function HandleErrorData(url) {
     const arrayObj  = {
         heightArray: [],
         weightArray: []
@@ -12,5 +12,3 @@ const HandleErrorData = async (url) => {
     })
     return arrayObj;
 }
-
-export default HandleErrorData;

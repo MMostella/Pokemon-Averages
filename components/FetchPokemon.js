@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const FetchPokemon = async (limit, offset) => {
+export default async function FetchPokemon(limit, offset) {
     let api_url = 'https://pokeapi.co/api/v2/pokemon';
     let pokemonArray = [];
     await axios(`${api_url}?limit=${limit}&offset=${offset}`)
@@ -15,5 +15,3 @@ const FetchPokemon = async (limit, offset) => {
 
     return pokemonArray;
 }
-
-export default FetchPokemon;
