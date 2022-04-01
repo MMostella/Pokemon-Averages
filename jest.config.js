@@ -1,7 +1,3 @@
-import { defaults } from "jest-config";
-
-const config = {
-  verbose: true,
-};
+const config = {};
 
 export default config;
